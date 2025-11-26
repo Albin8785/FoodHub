@@ -14,3 +14,15 @@ body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
 /* Custom details marker */
 details > summary { list-style: none; }
 details > summary::-webkit-details-marker { display: none; }
+
+/* Mobile optimization helpers */
+@media (max-width: 768px) {
+    /* Hide scrollbar in cart list for cleaner look */
+    #cart-items::-webkit-scrollbar {
+        width: 4px;
+    }
+    #cart-items::-webkit-scrollbar-thumb {
+        background-color: #ddd;
+        border-radius: 4px;
+    }
+}
