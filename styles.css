@@ -7,9 +7,9 @@ body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
 /* Filter Active State */
 .active-filter { background-color: #1f2937; color: white; border-color: #1f2937; }
 
-/* Smooth fade for view switching */
+/* Smooth fade - Removed Transform */
 .fade-in { animation: fadeIn 0.3s ease-in-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* Custom details marker */
 details > summary { list-style: none; }
@@ -17,12 +17,6 @@ details > summary::-webkit-details-marker { display: none; }
 
 /* Mobile optimization helpers */
 @media (max-width: 768px) {
-    /* Hide scrollbar in cart list for cleaner look */
-    #cart-items::-webkit-scrollbar {
-        width: 4px;
-    }
-    #cart-items::-webkit-scrollbar-thumb {
-        background-color: #ddd;
-        border-radius: 4px;
-    }
+    #cart-items::-webkit-scrollbar { width: 4px; }
+    #cart-items::-webkit-scrollbar-thumb { background-color: #ddd; border-radius: 4px; }
 }
