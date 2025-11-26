@@ -1,0 +1,16 @@
+body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
+.hide { display: none !important; }
+.btn-hover:hover { opacity: 0.9; transform: translateY(-1px); }
+.tab-active { background-color: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.login-active { border-color: #f97316; color: #ea580c; background-color: #fff7ed; }
+
+/* Filter Active State */
+.active-filter { background-color: #1f2937; color: white; border-color: #1f2937; }
+
+/* Smooth fade for view switching */
+.fade-in { animation: fadeIn 0.3s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Custom details marker */
+details > summary { list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
