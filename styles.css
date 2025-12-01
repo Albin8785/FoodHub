@@ -320,8 +320,10 @@ main {
     .layout-split { flex-direction: column; }
     .cart-area { width: 100%; }
     
-    /* FIX: Add cushion so last item is not hidden behind fixed cart */
-    .menu-area { padding-bottom: 320px; }
+    /* FIX: Add huge cushion to the container so last item scrolls above the fixed cart */
+    #customer-view-order { padding-bottom: 400px; }
+
+    .hide-mobile { display: none; }
 
     .cart-card { 
         position: fixed; 
@@ -333,6 +335,7 @@ main {
         border-radius: 1rem 1rem 0 0; 
         box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.1); 
     }
-    .cart-body { max-height: 120px; }
-    .hide-mobile { display: none; }
+    
+    /* Limit the list inside cart so it doesn't cover the whole screen */
+    .cart-body { max-height: 200px; }
 }
