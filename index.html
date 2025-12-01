@@ -4,312 +4,300 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>FoodHub - Enterprise</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="text-gray-800 h-[100dvh] overflow-hidden flex flex-col">
+<body>
 
-    <nav class="bg-white border-b border-gray-200 flex-none z-50">
-        <div class="container mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <div class="bg-orange-600 text-white p-1.5 rounded-lg">
-                    <i class="fa-solid fa-utensils"></i>
-                </div>
-                <span class="font-bold text-xl tracking-tight text-gray-900">Food<span class="text-orange-600">Hub</span></span>
+    <nav class="navbar">
+        <div class="container">
+            <div class="brand">
+                <div class="brand-icon"><i class="fa-solid fa-utensils"></i></div>
+                <span>Food<span style="color: var(--primary);">Hub</span></span>
             </div>
             
-            <div id="nav-container" class="flex items-center gap-4">
-                <span id="user-display" class="text-sm font-medium text-gray-600 hide"></span>
-                <button id="btn-logout" onclick="app.logout()" class="text-sm text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg transition hide">
-                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+            <div id="nav-container" class="nav-actions">
+                <span id="user-display" class="hide" style="font-weight: 500; font-size: 0.9rem;"></span>
+                <button id="btn-logout" onclick="app.logout()" class="btn-logout hide">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </button>
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow overflow-y-auto p-4 bg-gray-50">
+    <main>
         
-        <div id="view-login" class="view-section max-w-md mx-auto mt-10 fade-in">
-            <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-                <div class="text-center mb-8">
-                    <h1 class="text-2xl font-bold text-gray-900">Welcome Back</h1>
-                    <p class="text-gray-500 text-sm">Please select your role to login</p>
+        <div id="view-login" class="view-section login-container fade-in">
+            <div class="card">
+                <div class="text-center mb-6">
+                    <h1 style="font-size: 1.5rem; font-weight: bold;">Welcome Back</h1>
+                    <p style="color: var(--text-muted); font-size: 0.875rem;">Please select your role to login</p>
                 </div>
 
-                <div class="grid grid-cols-4 gap-2 mb-6 p-1 bg-gray-100 rounded-xl">
-                    <button onclick="app.setLoginRole('customer')" class="login-role-btn login-active py-2 rounded-lg text-xs font-bold transition" data-role="customer">Customer</button>
-                    <button onclick="app.setLoginRole('admin')" class="login-role-btn py-2 rounded-lg text-xs font-bold text-gray-500 transition" data-role="admin">Admin</button>
-                    <button onclick="app.setLoginRole('rider')" class="login-role-btn py-2 rounded-lg text-xs font-bold text-gray-500 transition" data-role="rider">Rider</button>
-                    <button onclick="app.loginQR()" class="login-role-btn py-2 rounded-lg text-xs font-bold text-gray-500 transition hover:bg-white hover:shadow-sm text-purple-600"><i class="fa-solid fa-qrcode mr-1"></i> QR</button>
+                <div class="role-switcher">
+                    <button onclick="app.setLoginRole('customer')" class="role-btn active" data-role="customer">Customer</button>
+                    <button onclick="app.setLoginRole('admin')" class="role-btn" data-role="admin">Admin</button>
+                    <button onclick="app.setLoginRole('rider')" class="role-btn" data-role="rider">Rider</button>
+                    <button onclick="app.loginQR()" class="role-btn" style="color: #7e22ce;"><i class="fa-solid fa-qrcode"></i> QR</button>
                 </div>
 
-                <form onsubmit="app.login(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Username</label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-2.5 text-gray-400"><i class="fa-solid fa-user"></i></span>
-                            <input type="text" id="login-user" required class="w-full pl-10 pr-4 py-2 border rounded-lg text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition" placeholder="Enter username">
+                <form onsubmit="app.login(event)">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                            <input type="text" id="login-user" required class="input-field" placeholder="Enter username">
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Password</label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-2.5 text-gray-400"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" id="login-pass" required class="w-full pl-10 pr-4 py-2 border rounded-lg text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition" placeholder="••••••••">
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="login-pass" required class="input-field" placeholder="••••••••">
                         </div>
                     </div>
                     
-                    <button type="submit" class="w-full bg-gray-900 text-white py-2.5 rounded-lg font-bold hover:bg-gray-800 transition shadow-lg shadow-gray-200">
-                        Login to Portal
-                    </button>
+                    <button type="submit" class="btn-primary">Login to Portal</button>
                 </form>
 
-                <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-400 text-center space-y-1">
+                <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem; text-align: center; font-size: 0.75rem; color: var(--text-muted);">
                     <p>Demo Credentials:</p>
-                    <p><span class="font-bold">Customer:</span> user / user123</p>
-                    <p><span class="font-bold">Admin:</span> admin / admin123</p>
-                    <p><span class="font-bold">Rider:</span> rider / rider123</p>
+                    <p><strong>Customer:</strong> user / user123</p>
+                    <p><strong>Admin:</strong> admin / admin123</p>
+                    <p><strong>Rider:</strong> rider / rider123</p>
                 </div>
             </div>
         </div>
 
-        <div id="view-customer" class="view-section hide max-w-6xl mx-auto fade-in">
-            <div class="flex gap-4 mb-6">
-                <button onclick="app.toggleCustomerView('order')" id="btn-cust-order" class="text-lg font-bold border-b-2 border-gray-900 pb-1">Order Food</button>
-                <button onclick="app.toggleCustomerView('book')" id="btn-cust-book" class="text-lg font-bold text-gray-400 border-b-2 border-transparent pb-1 hover:text-gray-600">Book Table</button>
+        <div id="view-customer" class="view-section customer-container hide fade-in">
+            <div class="tabs">
+                <button onclick="app.toggleCustomerView('order')" id="btn-cust-order" class="tab-btn active">Order Food</button>
+                <button onclick="app.toggleCustomerView('book')" id="btn-cust-book" class="tab-btn">Book Table</button>
             </div>
 
             <div id="customer-view-order" class="customer-subview">
-                <div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl p-4 mb-6 flex justify-between items-center shadow-md">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-yellow-500/20 p-2 rounded-full"><i class="fa-solid fa-crown text-yellow-400"></i></div>
+                <div class="loyalty-card">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 0.5rem; border-radius: 50%;"><i class="fa-solid fa-crown" style="color: #facc15;"></i></div>
                         <div>
-                            <p class="text-xs text-gray-300 uppercase tracking-wide">Loyalty Balance</p>
-                            <p class="font-bold text-xl"><span id="cust-points">0</span> pts</p>
+                            <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Loyalty Balance</p>
+                            <p style="font-weight: bold; font-size: 1.25rem;"><span id="cust-points">0</span> pts</p>
                         </div>
                     </div>
-                    <button class="bg-white/10 px-4 py-2 rounded-lg text-sm backdrop-blur-sm border border-white/10 opacity-75 cursor-default">
-                        <i class="fa-solid fa-star mr-2"></i>Gold Member
+                    <button style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem;">
+                        <i class="fa-solid fa-star"></i> Gold Member
                     </button>
                 </div>
 
-                <div class="flex gap-2 mb-4">
-                    <button onclick="app.setMenuFilter('all')" class="filter-btn active-filter px-4 py-1.5 rounded-full text-sm font-bold border transition" data-filter="all">All</button>
-                    <button onclick="app.setMenuFilter('veg')" class="filter-btn px-4 py-1.5 rounded-full text-sm font-bold border border-green-200 text-green-700 hover:bg-green-50 transition" data-filter="veg">🥬 Veg</button>
-                    <button onclick="app.setMenuFilter('non-veg')" class="filter-btn px-4 py-1.5 rounded-full text-sm font-bold border border-red-200 text-red-700 hover:bg-red-50 transition" data-filter="non-veg">🍖 Non-Veg</button>
+                <div class="filter-row">
+                    <button onclick="app.setMenuFilter('all')" class="filter-btn active" data-filter="all">All</button>
+                    <button onclick="app.setMenuFilter('veg')" class="filter-btn" style="color: #15803d;" data-filter="veg">🥬 Veg</button>
+                    <button onclick="app.setMenuFilter('non-veg')" class="filter-btn" style="color: #b91c1c;" data-filter="non-veg">🍖 Non-Veg</button>
                 </div>
 
-                <div class="flex flex-col lg:flex-row gap-6">
-                    <div class="flex-grow space-y-8" id="customer-menu-container">
+                <div class="layout-split">
+                    <div class="menu-area" id="customer-menu-container">
                         <div id="section-food">
-                            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 border-b pb-2">
-                                <i class="fa-solid fa-burger text-orange-500"></i> Food
-                            </h3>
-                            <div id="customer-menu-food" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                            <h3 class="section-title"><i class="fa-solid fa-burger" style="color: var(--primary);"></i> Food</h3>
+                            <div id="customer-menu-food" class="grid-menu"></div>
                         </div>
 
-                        <div id="section-drinks">
-                            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 border-b pb-2">
-                                <i class="fa-solid fa-glass-water text-blue-500"></i> Drinks
-                            </h3>
-                            <div id="customer-menu-drinks" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                        <div id="section-drinks" style="margin-top: 2rem;">
+                            <h3 class="section-title"><i class="fa-solid fa-glass-water" style="color: var(--blue);"></i> Drinks</h3>
+                            <div id="customer-menu-drinks" class="grid-menu"></div>
                         </div>
                     </div>
 
-                    <div class="fixed bottom-0 left-0 right-0 z-40 w-full bg-white lg:static lg:w-80 lg:z-auto lg:bg-transparent pb-[env(safe-area-inset-bottom)]">
-                        <div class="bg-white shadow-[0_-5px_15px_rgba(0,0,0,0.1)] border-t border-gray-200 lg:rounded-xl lg:border lg:shadow-sm lg:sticky lg:top-4">
-                            
-                            <div class="p-3 lg:p-4 border-b border-gray-100 flex justify-between items-center">
-                                <h3 class="font-bold text-gray-800">Current Order</h3>
-                                <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-full font-bold" id="cart-count">0</span>
+                    <div class="cart-area">
+                        <div class="cart-card">
+                            <div class="cart-header">
+                                <h3>Current Order</h3>
+                                <span style="background: #ffedd5; color: #c2410c; padding: 2px 8px; border-radius: 99px; font-size: 0.75rem;" id="cart-count">0</span>
                             </div>
                             
-                            <div id="cart-items" class="p-3 lg:p-4 space-y-3 max-h-[120px] lg:max-h-[400px] overflow-y-auto min-h-[80px] lg:min-h-[150px] flex flex-col items-center justify-center text-gray-400 text-sm">
-                                Your cart is empty
+                            <div id="cart-items" class="cart-body">
+                                <div style="text-align: center; color: var(--text-muted); padding: 2rem 0;">Your cart is empty</div>
                             </div>
                             
-                            <div class="p-3 lg:p-4 bg-gray-50 border-t border-gray-100 rounded-b-xl">
-                                <div class="flex justify-between text-sm mb-2"><span>Total</span> <span class="font-bold text-gray-900" id="cart-total">$0.00</span></div>
-                                <button onclick="app.showCheckoutModal()" class="w-full bg-gray-900 text-white py-3 rounded-lg font-medium btn-hover shadow-lg shadow-gray-200">Checkout</button>
+                            <div class="cart-footer">
+                                <div class="cart-row"><span>Total</span> <span style="font-weight: bold; font-size: 1.1rem;" id="cart-total">$0.00</span></div>
+                                <button onclick="app.showCheckoutModal()" class="btn-primary">Checkout</button>
                             </div>
                         </div>
+                        <div style="height: 100px;" class="hide-mobile"></div>
                     </div>
                 </div>
-
-                <div class="h-[400px] w-full lg:hidden block"></div>
-
             </div>
 
             <div id="customer-view-book" class="customer-subview hide">
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm max-w-4xl mx-auto">
-                    <div class="text-center mb-8">
-                        <h2 class="text-2xl font-bold mb-2">Reserve Your Spot</h2>
-                        <div class="flex justify-center gap-6 text-sm">
-                            <span class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-green-500"></div> Available</span>
-                            <span class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-yellow-500"></div> Reserved</span>
-                            <span class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-red-500"></div> Occupied</span>
+                <div class="card" style="max-width: 900px; margin: 0 auto;">
+                    <div class="text-center mb-6">
+                        <h2 style="font-size: 1.5rem; font-weight: bold;">Reserve Your Spot</h2>
+                        <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 0.5rem; font-size: 0.875rem;">
+                            <span style="display: flex; align-items: center; gap: 5px;"><div style="width: 10px; height: 10px; border-radius: 50%; background: var(--success);"></div> Available</span>
+                            <span style="display: flex; align-items: center; gap: 5px;"><div style="width: 10px; height: 10px; border-radius: 50%; background: #eab308;"></div> Reserved</span>
+                            <span style="display: flex; align-items: center; gap: 5px;"><div style="width: 10px; height: 10px; border-radius: 50%; background: var(--danger);"></div> Occupied</span>
                         </div>
                     </div>
-                    <div id="customer-tables-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        </div>
+                    <div id="customer-tables-grid" class="grid-menu" style="grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));"></div>
                 </div>
             </div>
         </div>
 
-        <div id="view-admin" class="view-section hide max-w-7xl mx-auto fade-in">
-            <div class="bg-white rounded-lg p-1.5 inline-flex shadow-sm border border-gray-200 mb-6 overflow-x-auto max-w-full">
-                <button onclick="app.switchAdminTab('orders')" class="admin-tab-btn px-4 py-2 rounded-md text-sm font-medium transition" data-tab="orders">Orders</button>
-                <button onclick="app.switchAdminTab('menu')" class="admin-tab-btn px-4 py-2 rounded-md text-sm font-medium transition" data-tab="menu">Menu</button>
-                <button onclick="app.switchAdminTab('tables')" class="admin-tab-btn px-4 py-2 rounded-md text-sm font-medium transition" data-tab="tables">Tables</button>
-                <button onclick="app.switchAdminTab('fleet')" class="admin-tab-btn px-4 py-2 rounded-md text-sm font-medium transition" data-tab="fleet">Fleet</button>
-                <button onclick="app.switchAdminTab('marketing')" class="admin-tab-btn px-4 py-2 rounded-md text-sm font-medium transition" data-tab="marketing">Marketing</button>
+        <div id="view-admin" class="view-section admin-container hide fade-in">
+            <div class="admin-nav">
+                <button onclick="app.switchAdminTab('orders')" class="admin-btn active" data-tab="orders">Orders</button>
+                <button onclick="app.switchAdminTab('menu')" class="admin-btn" data-tab="menu">Menu</button>
+                <button onclick="app.switchAdminTab('tables')" class="admin-btn" data-tab="tables">Tables</button>
+                <button onclick="app.switchAdminTab('fleet')" class="admin-btn" data-tab="fleet">Fleet</button>
+                <button onclick="app.switchAdminTab('marketing')" class="admin-btn" data-tab="marketing">Marketing</button>
             </div>
 
             <div class="admin-content-area">
-                <div id="tab-orders" class="admin-panel grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-                        <h3 class="font-bold mb-4 text-orange-600 flex items-center gap-2"><i class="fa-solid fa-fire"></i> Kitchen / Pending</h3>
-                        <div id="admin-orders-pending" class="space-y-3"></div>
+                <div id="tab-orders" class="admin-panel grid-2">
+                    <div class="admin-panel-card">
+                        <h3 style="font-weight: bold; color: var(--primary); margin-bottom: 1rem; display: flex; gap: 0.5rem;"><i class="fa-solid fa-fire"></i> Kitchen / Pending</h3>
+                        <div id="admin-orders-pending"></div>
                     </div>
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-                        <h3 class="font-bold mb-4 text-green-600 flex items-center gap-2"><i class="fa-solid fa-bell"></i> Ready / Completed</h3>
-                        <div id="admin-orders-ready" class="space-y-3"></div>
+                    <div class="admin-panel-card">
+                        <h3 style="font-weight: bold; color: var(--success); margin-bottom: 1rem; display: flex; gap: 0.5rem;"><i class="fa-solid fa-bell"></i> Ready / Completed</h3>
+                        <div id="admin-orders-ready"></div>
                     </div>
                 </div>
                 
-                <div id="tab-menu" class="admin-panel hide grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm h-fit">
-                        <h4 class="font-bold mb-4">Add Item</h4>
-                        <form onsubmit="app.addMenuItem(event)" class="space-y-3">
-                            <input type="text" name="name" placeholder="Item Name" required class="w-full border p-2 rounded text-sm outline-none focus:border-blue-500">
-                            <div class="flex gap-2">
-                                <input type="number" step="0.01" name="price" placeholder="Price" required class="w-full border p-2 rounded text-sm outline-none focus:border-blue-500">
-                                
-                                <select name="group" required class="w-full border p-2 rounded text-sm outline-none focus:border-blue-500 bg-white">
+                <div id="tab-menu" class="admin-panel hide" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+                    <div class="admin-panel-card" style="height: fit-content;">
+                        <h4 style="font-weight: bold; margin-bottom: 1rem;">Add Item</h4>
+                        <form onsubmit="app.addMenuItem(event)">
+                            <div class="form-group"><input type="text" name="name" placeholder="Item Name" required class="input-field"></div>
+                            <div class="form-group" style="display: flex; gap: 0.5rem;">
+                                <input type="number" step="0.01" name="price" placeholder="Price" required class="input-field">
+                                <select name="group" required class="input-field">
                                     <option value="food">Food</option>
                                     <option value="drink">Drink</option>
                                 </select>
                             </div>
-                            <select name="type" required class="w-full border p-2 rounded text-sm outline-none focus:border-blue-500 bg-white">
-                                <option value="veg">Veg</option>
-                                <option value="non-veg">Non-Veg</option>
-                            </select>
-                            
-                            <input type="text" name="category" placeholder="Category (e.g. Pasta)" required class="w-full border p-2 rounded text-sm outline-none focus:border-blue-500">
-                            <input type="url" name="image" placeholder="Image URL" class="w-full border p-2 rounded text-sm outline-none focus:border-blue-500" value="https://placehold.co/400?text=Yum">
-                            <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Add Item</button>
+                            <div class="form-group">
+                                <select name="type" required class="input-field">
+                                    <option value="veg">Veg</option>
+                                    <option value="non-veg">Non-Veg</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><input type="text" name="category" placeholder="Category" required class="input-field"></div>
+                            <div class="form-group"><input type="url" name="image" placeholder="Image URL" class="input-field" value="https://placehold.co/400?text=Yum"></div>
+                            <button class="btn-primary" style="background: var(--blue);">Add Item</button>
                         </form>
                     </div>
-                    <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-gray-500 border-b"><tr><th class="pb-2">Item</th><th class="pb-2">Group</th><th class="pb-2">Type</th><th class="pb-2">Price</th><th class="pb-2 text-right">Action</th></tr></thead>
+                    <div class="admin-panel-card">
+                        <table class="table-std">
+                            <thead><tr><th>Item</th><th>Group</th><th>Type</th><th>Price</th><th style="text-align: right;">Action</th></tr></thead>
                             <tbody id="admin-menu-list"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <div id="tab-tables" class="admin-panel hide bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <div class="grid grid-cols-3 md:grid-cols-5 gap-4" id="admin-tables-grid"></div>
+                <div id="tab-tables" class="admin-panel hide admin-panel-card">
+                    <div class="grid-menu" style="grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));" id="admin-tables-grid"></div>
                 </div>
-                <div id="tab-fleet" class="admin-panel hide">
-                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                        <h3 class="font-bold text-lg mb-4">Delivery Fleet Status</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm">
-                                <thead class="bg-gray-50 text-gray-500">
-                                    <tr><th class="p-3">Rider Name</th><th class="p-3">Status</th><th class="p-3">Current Status</th></tr>
-                                </thead>
-                                <tbody id="fleet-list" class="divide-y divide-gray-100"></tbody>
-                            </table>
-                        </div>
-                    </div>
+                
+                <div id="tab-fleet" class="admin-panel hide admin-panel-card">
+                    <h3 style="font-weight: bold; margin-bottom: 1rem;">Delivery Fleet Status</h3>
+                    <table class="table-std">
+                        <thead style="background: #f9fafb;"><tr><th>Rider Name</th><th>Status</th><th>Current Status</th></tr></thead>
+                        <tbody id="fleet-list"></tbody>
+                    </table>
                 </div>
-                <div id="tab-marketing" class="admin-panel hide grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                        <h3 class="font-bold text-lg mb-4">SMS Automation</h3>
-                        <textarea id="sms-body" class="w-full border p-3 rounded-lg text-sm mb-3 outline-none focus:border-blue-500" rows="3" placeholder="Promotional message..."></textarea>
-                        <button onclick="app.sendSMSBlast()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 w-full">Send SMS Blast</button>
+
+                <div id="tab-marketing" class="admin-panel hide grid-2">
+                    <div class="admin-panel-card">
+                        <h3 style="font-weight: bold; margin-bottom: 1rem;">SMS Automation</h3>
+                        <textarea id="sms-body" class="input-field" rows="3" placeholder="Promotional message..." style="margin-bottom: 1rem;"></textarea>
+                        <button onclick="app.sendSMSBlast()" class="btn-primary" style="background: var(--blue);">Send SMS Blast</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="view-rider" class="view-section hide max-w-2xl mx-auto fade-in">
-            <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
-                <div class="bg-gray-800 p-4 text-white flex justify-between items-center">
+        <div id="view-rider" class="view-section rider-container hide fade-in">
+            <div class="rider-dash">
+                <div class="rider-header">
                     <div>
-                        <h2 class="font-bold text-lg">Delivery Dashboard</h2>
-                        <p class="text-xs text-gray-400">Rider ID: #RD-9902</p>
+                        <h2 style="font-weight: bold;">Delivery Dashboard</h2>
+                        <p style="font-size: 0.75rem; opacity: 0.8;">Rider ID: #RD-9902</p>
                     </div>
-                    <select onchange="app.setRiderStatus(this.value)" id="rider-status-select" class="bg-gray-700 text-sm border-none rounded px-3 py-1.5 focus:ring-1 focus:ring-green-400 outline-none cursor-pointer font-bold">
+                    <select onchange="app.setRiderStatus(this.value)" id="rider-status-select" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 0.25rem; border-radius: 4px;">
                         <option value="Online">🟢 Online</option>
                         <option value="On Duty">🟡 On Duty</option>
                         <option value="Offline">⚪ Offline</option>
                     </select>
                 </div>
 
-                <div class="flex bg-gray-50 border-b border-gray-200">
-                    <button onclick="app.switchRiderTab('new')" id="rtab-new" class="flex-1 py-3 text-sm font-bold text-blue-600 border-b-2 border-blue-600 bg-blue-50">Incoming</button>
-                    <button onclick="app.switchRiderTab('active')" id="rtab-active" class="flex-1 py-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:bg-gray-100">My Deliveries</button>
+                <div class="rider-tabs">
+                    <button onclick="app.switchRiderTab('new')" id="rtab-new" class="rider-tab active">Incoming</button>
+                    <button onclick="app.switchRiderTab('active')" id="rtab-active" class="rider-tab">My Deliveries</button>
                 </div>
 
                 <div id="rider-panel-new" class="rider-subpanel">
-                    <div id="rider-list-new" class="divide-y divide-gray-100"></div>
-                    <div id="rider-empty-new" class="p-10 text-center text-gray-400 hide">No new delivery requests.</div>
+                    <div id="rider-list-new"></div>
+                    <div id="rider-empty-new" style="padding: 2.5rem; text-align: center; color: var(--text-muted);" class="hide">No new delivery requests.</div>
                 </div>
 
                 <div id="rider-panel-active" class="rider-subpanel hide">
-                    <div id="rider-list-active" class="divide-y divide-gray-100 bg-blue-50/30"></div>
-                    <div id="rider-empty-active" class="p-10 text-center text-gray-400 hide">No active deliveries.</div>
+                    <div id="rider-list-active" style="background: #eff6ff;"></div>
+                    <div id="rider-empty-active" style="padding: 2.5rem; text-align: center; color: var(--text-muted);" class="hide">No active deliveries.</div>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <div id="modal-checkout" class="fixed inset-0 bg-black/50 z-50 hide flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
-            <div class="p-6">
-                <h3 class="text-xl font-bold mb-4">Confirm Order</h3>
-                <div class="space-y-3 mb-6">
-                    <div id="address-container">
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Delivery Address</label>
-                        <textarea id="checkout-address" class="w-full border p-2 rounded-lg text-sm focus:ring-1 focus:ring-orange-500 outline-none resize-none bg-gray-50" rows="2" placeholder="Street, City, Zip Code..."></textarea>
+    <div id="modal-checkout" class="modal-overlay hide">
+        <div class="modal-box fade-in">
+            <div class="modal-content">
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem;">Confirm Order</h3>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <div id="address-container" class="form-group">
+                        <label class="form-label">Delivery Address</label>
+                        <textarea id="checkout-address" class="input-field" rows="2" placeholder="Street, City, Zip Code..."></textarea>
                     </div>
                     
-                    <div class="border-t border-dashed pt-3">
-                        <div class="flex justify-between text-sm"><span>Subtotal</span><span id="modal-subtotal">$0.00</span></div>
-                        <div class="flex justify-between text-sm"><span>Tax</span><span id="modal-tax">$0.00</span></div>
-                        <div class="flex justify-between text-lg font-bold mt-2"><span>Total</span><span id="modal-total">$0.00</span></div>
-                        <div class="text-xs text-green-600 mt-1 flex items-center gap-1"><i class="fa-solid fa-gift"></i> You will earn <span id="modal-points" class="font-bold">0</span> points</div>
+                    <div style="border-top: 1px dashed var(--border); padding-top: 0.75rem;">
+                        <div class="cart-row"><span>Subtotal</span><span id="modal-subtotal">$0.00</span></div>
+                        <div class="cart-row"><span>Tax</span><span id="modal-tax">$0.00</span></div>
+                        <div class="cart-row" style="font-weight: bold; font-size: 1.125rem;"><span>Total</span><span id="modal-total">$0.00</span></div>
+                        <div style="color: var(--success); font-size: 0.75rem; margin-top: 5px;"><i class="fa-solid fa-gift"></i> You will earn <span id="modal-points" style="font-weight: bold;">0</span> points</div>
                     </div>
                 </div>
                 
-                <h4 class="font-bold text-sm mb-2 text-gray-500 uppercase">Payment Method</h4>
-                <div class="grid grid-cols-2 gap-3 mb-6">
-                    <button onclick="app.selectPayment('cash')" id="btn-cash" class="border-2 border-gray-200 p-3 rounded-xl flex flex-col items-center gap-2 hover:bg-gray-50 transition focus:border-gray-900 focus:bg-gray-50 outline-none">
-                        <i class="fa-solid fa-money-bill-wave text-xl text-green-600"></i><span class="text-xs font-bold">Cash</span>
+                <h4 class="form-label" style="margin-bottom: 0.5rem;">Payment Method</h4>
+                <div class="pay-grid">
+                    <button onclick="app.selectPayment('cash')" id="btn-cash" class="pay-btn">
+                        <i class="fa-solid fa-money-bill-wave" style="font-size: 1.5rem; color: var(--success);"></i>
+                        <span style="font-size: 0.75rem; font-weight: bold;">Cash</span>
                     </button>
-                    <button onclick="app.selectPayment('qr')" id="btn-qr" class="border-2 border-gray-200 p-3 rounded-xl flex flex-col items-center gap-2 hover:bg-gray-50 transition focus:border-gray-900 focus:bg-gray-50 outline-none">
-                        <i class="fa-solid fa-qrcode text-xl text-blue-600"></i><span class="text-xs font-bold">QR Pay</span>
+                    <button onclick="app.selectPayment('qr')" id="btn-qr" class="pay-btn">
+                        <i class="fa-solid fa-qrcode" style="font-size: 1.5rem; color: var(--blue);"></i>
+                        <span style="font-size: 0.75rem; font-weight: bold;">QR Pay</span>
                     </button>
                 </div>
-                <div id="qr-display" class="hide text-center mb-6 bg-gray-50 p-4 rounded-lg border border-dashed border-gray-300">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=FoodHub-Payment" class="mx-auto mb-2 mix-blend-multiply" alt="QR">
-                    <p class="text-xs text-gray-500">Scan with your banking app to pay</p>
+                
+                <div id="qr-display" class="hide" style="text-align: center; margin-bottom: 1.5rem; background: #f9fafb; padding: 1rem; border: 1px dashed var(--border); border-radius: 0.5rem;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=FoodHub-Payment" style="width: 100px; height: 100px; margin-bottom: 0.5rem; mix-blend-mode: multiply;">
+                    <p style="font-size: 0.75rem; color: var(--text-muted);">Scan with banking app</p>
                 </div>
-                <div class="flex gap-3">
-                    <button onclick="document.getElementById('modal-checkout').classList.add('hide')" class="flex-1 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">Cancel</button>
-                    <button onclick="app.confirmOrder()" class="flex-1 bg-gray-900 text-white py-3 rounded-lg font-bold shadow-lg hover:bg-gray-800">Place Order</button>
+
+                <div style="display: flex; gap: 0.75rem;">
+                    <button onclick="document.getElementById('modal-checkout').classList.add('hide')" style="flex: 1; background: #f3f4f6; border: none; padding: 0.75rem; border-radius: 0.5rem; font-weight: bold; cursor: pointer;">Cancel</button>
+                    <button onclick="app.confirmOrder()" class="btn-primary" style="flex: 1;">Place Order</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="toast" class="fixed top-4 right-5 bg-gray-900 text-white px-5 py-3 rounded-lg shadow-xl -translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 z-[60] text-sm">
-        <i class="fa-solid fa-check-circle text-green-400"></i> <span id="toast-msg">Success</span>
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-check-circle"></i> <span id="toast-msg">Success</span>
     </div>
 
     <script src="script.js"></script>

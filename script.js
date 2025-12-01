@@ -10,7 +10,6 @@ const app = {
             { id: 4, name: "Cola", price: 3.00, cat: "Drinks", type: "veg", group: "drink", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&q=80" },
             { id: 5, name: "Pepsi", price: 2.00, cat: "Drinks", type: "veg", group: "drink", img: "https://images.unsplash.com/photo-1629203851122-3726ecdf080e?q=80&w=1229&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }
         ],
-
         menuFilter: 'all',
         cart: [],
         orders: [],
@@ -32,11 +31,11 @@ const app = {
     // --- AUTH ---
     setLoginRole(role) {
         this.data.loginRole = role;
-        document.querySelectorAll('.login-role-btn').forEach(btn => {
+        document.querySelectorAll('.role-btn').forEach(btn => {
             if (btn.dataset.role === role) {
-                btn.classList.add('login-active'); btn.classList.remove('text-gray-500');
+                btn.classList.add('active');
             } else {
-                btn.classList.remove('login-active'); btn.classList.add('text-gray-500');
+                btn.classList.remove('active');
             }
         });
     },
@@ -64,11 +63,10 @@ const app = {
         }
     },
 
-    // --- NEW: QR LOGIN ---
     loginQR() {
         this.data.currentRole = 'takeaway';
         this.updateNav(true, 'Guest (Takeaway)', 'takeaway');
-        this.navigate('customer'); // Reuses customer view, but acts as takeaway
+        this.navigate('customer'); 
         this.showToast('Scanned QR: Welcome to Takeaway');
     },
 
@@ -101,15 +99,10 @@ const app = {
         document.querySelectorAll('.customer-subview').forEach(el => el.classList.add('hide'));
         document.getElementById(`customer-view-${subview}`).classList.remove('hide');
         
-        const btnOrder = document.getElementById('btn-cust-order');
-        const btnBook = document.getElementById('btn-cust-book');
-        
-        if(subview === 'order') {
-            btnOrder.className = "text-lg font-bold border-b-2 border-gray-900 pb-1";
-            btnBook.className = "text-lg font-bold text-gray-400 border-b-2 border-transparent pb-1 hover:text-gray-600";
-        } else {
-            btnBook.className = "text-lg font-bold border-b-2 border-gray-900 pb-1";
-            btnOrder.className = "text-lg font-bold text-gray-400 border-b-2 border-transparent pb-1 hover:text-gray-600";
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        if(subview === 'order') document.getElementById('btn-cust-order').classList.add('active');
+        else {
+            document.getElementById('btn-cust-book').classList.add('active');
             this.renderCustomerTables();
         }
     },
@@ -117,8 +110,8 @@ const app = {
     setMenuFilter(type) {
         this.data.menuFilter = type;
         document.querySelectorAll('.filter-btn').forEach(btn => {
-            if(btn.dataset.filter === type) btn.classList.add('active-filter');
-            else btn.classList.remove('active-filter');
+            if(btn.dataset.filter === type) btn.classList.add('active');
+            else btn.classList.remove('active');
         });
         this.renderMenu();
     },
@@ -137,19 +130,19 @@ const app = {
 
         const createCard = (item) => {
             const indicator = item.type === 'veg' 
-                ? '<span class="absolute top-2 left-2 bg-white/90 p-1 rounded shadow"><div class="w-3 h-3 border border-green-600 flex items-center justify-center"><div class="w-2 h-2 bg-green-600 rounded-full"></div></div></span>'
-                : '<span class="absolute top-2 left-2 bg-white/90 p-1 rounded shadow"><div class="w-3 h-3 border border-red-600 flex items-center justify-center"><div class="w-2 h-2 bg-red-600 rotate-45"></div></div></span>';
+                ? '<div class="veg-icon" style="border: 1px solid green;"><div style="width: 8px; height: 8px; background: green; border-radius: 50%;"></div></div>'
+                : '<div class="veg-icon" style="border: 1px solid red;"><div style="width: 8px; height: 8px; background: red; border-radius: 50%;"></div></div>';
 
             return `
-            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition relative">
-                <div class="h-40 overflow-hidden rounded-lg mb-3 relative">
-                    <img src="${item.img}" class="w-full h-full object-cover">
+            <div class="menu-card">
+                <div class="menu-img-wrap">
+                    <img src="${item.img}">
                     ${indicator}
-                    <span class="absolute bottom-2 right-2 bg-white px-2 py-1 rounded text-xs font-bold shadow">$${item.price.toFixed(2)}</span>
+                    <span class="price-tag">$${item.price.toFixed(2)}</span>
                 </div>
-                <h4 class="font-bold text-gray-800">${item.name}</h4>
-                <p class="text-xs text-gray-400 capitalize">${item.type} • ${item.cat}</p>
-                <button onclick="app.addToCart(${item.id})" class="w-full mt-2 bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 rounded-lg text-sm font-medium transition">Add +</button>
+                <h4 style="font-weight: bold;">${item.name}</h4>
+                <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: capitalize;">${item.type} • ${item.cat}</p>
+                <button onclick="app.addToCart(${item.id})" class="btn-add">Add +</button>
             </div>`;
         };
 
@@ -169,7 +162,7 @@ const app = {
 
         const container = document.getElementById('customer-menu-container');
         if (foodList.length === 0 && drinkList.length === 0) {
-            container.innerHTML = '<div class="col-span-3 text-center text-gray-400 py-10 w-full">No items found for this preference.</div>';
+            container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 2rem;">No items found for this preference.</div>';
         }
         
         document.getElementById('cust-points').innerText = this.data.loyaltyPoints;
@@ -185,19 +178,22 @@ const app = {
 
     updateCart() {
         const container = document.getElementById('cart-items');
-        if(!this.data.cart.length) { container.innerHTML = 'Your cart is empty'; document.getElementById('cart-total').innerText = '$0.00'; document.getElementById('cart-count').innerText = '0'; return; }
+        if(!this.data.cart.length) { container.innerHTML = '<div style="text-align:center; color:#9ca3af; padding:1rem;">Your cart is empty</div>'; document.getElementById('cart-total').innerText = '$0.00'; document.getElementById('cart-count').innerText = '0'; return; }
         let total = 0;
         container.innerHTML = this.data.cart.map(c => {
             total += c.price * c.qty;
-            const typeColor = c.type === 'veg' ? 'text-green-600' : 'text-red-600';
-            return `<div class="flex justify-between items-center w-full bg-gray-50 p-2 rounded">
+            const typeColor = c.type === 'veg' ? 'green' : 'red';
+            return `<div class="cart-row" style="background: #f9fafb; padding: 0.5rem; border-radius: 4px; align-items: center;">
                     <div>
-                        <p class="font-bold text-gray-800 flex items-center gap-1">
-                            <i class="fa-solid fa-circle text-[8px] ${typeColor}"></i> ${c.name}
+                        <p style="font-weight: bold; font-size: 0.9rem;">
+                            <span style="color:${typeColor}">●</span> ${c.name}
                         </p>
-                        <p class="text-xs text-gray-500">$${c.price} x ${c.qty}</p>
+                        <p style="font-size: 0.75rem; color: #6b7280;">$${c.price} x ${c.qty}</p>
                     </div>
-                    <div class="flex gap-2"><button onclick="app.modQty(${c.id}, -1)" class="w-6 h-6 bg-white border rounded text-xs">-</button><button onclick="app.modQty(${c.id}, 1)" class="w-6 h-6 bg-white border rounded text-xs">+</button></div>
+                    <div style="display: flex; gap: 5px;">
+                        <button onclick="app.modQty(${c.id}, -1)" style="width: 24px; height: 24px; border: 1px solid #ddd; background: white; cursor: pointer;">-</button>
+                        <button onclick="app.modQty(${c.id}, 1)" style="width: 24px; height: 24px; border: 1px solid #ddd; background: white; cursor: pointer;">+</button>
+                    </div>
                 </div>`;
         }).join('');
         document.getElementById('cart-total').innerText = '$' + total.toFixed(2);
@@ -213,17 +209,17 @@ const app = {
     renderCustomerTables() {
         const grid = document.getElementById('customer-tables-grid');
         grid.innerHTML = this.data.tables.map(t => {
-            let color = 'bg-green-100 text-green-700 hover:bg-green-200 cursor-pointer border-green-200';
+            let style = 'background: #dcfce7; color: #15803d; border: 2px solid #bbf7d0; cursor: pointer;';
             let icon = 'fa-check';
             let action = `onclick="app.bookTable(${t.id})"`;
             
-            if(t.status === 'reserved') { color = 'bg-yellow-100 text-yellow-700 cursor-not-allowed border-yellow-200 opacity-70'; icon = 'fa-clock'; action = ''; }
-            if(t.status === 'occupied') { color = 'bg-red-100 text-red-700 cursor-not-allowed border-red-200 opacity-70'; icon = 'fa-user'; action = ''; }
+            if(t.status === 'reserved') { style = 'background: #fef9c3; color: #a16207; border: 2px solid #fef08a; cursor: not-allowed; opacity: 0.7;'; icon = 'fa-clock'; action = ''; }
+            if(t.status === 'occupied') { style = 'background: #fee2e2; color: #b91c1c; border: 2px solid #fecaca; cursor: not-allowed; opacity: 0.7;'; icon = 'fa-user'; action = ''; }
 
             return `
-                <div ${action} class="${color} border-2 rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition h-24">
-                    <span class="text-lg font-bold">T-${t.id}</span>
-                    <div class="flex items-center gap-1 text-xs font-bold uppercase"><i class="fa-solid ${icon}"></i> ${t.status}</div>
+                <div ${action} style="${style} padding: 1rem; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 90px;">
+                    <span style="font-size: 1.1rem; font-weight: bold;">T-${t.id}</span>
+                    <div style="font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-top: 5px;"><i class="fa-solid ${icon}"></i> ${t.status}</div>
                 </div>
             `;
         }).join('');
@@ -252,7 +248,6 @@ const app = {
         document.getElementById('qr-display').classList.add('hide');
         this.data.selectedPayment = null;
 
-        // --- TOGGLE ADDRESS FIELD ---
         const addrContainer = document.getElementById('address-container');
         if(this.data.currentRole === 'takeaway') {
             addrContainer.classList.add('hide');
@@ -261,12 +256,17 @@ const app = {
         }
 
         document.getElementById('modal-checkout').classList.remove('hide');
+        document.getElementById('modal-checkout').classList.add('modal-overlay'); // Ensure flex display
     },
 
     selectPayment(type) {
         this.data.selectedPayment = type;
         if(type === 'qr') document.getElementById('qr-display').classList.remove('hide');
         else document.getElementById('qr-display').classList.add('hide');
+        
+        // Visual feedback
+        document.getElementById('btn-cash').style.borderColor = type === 'cash' ? 'var(--secondary)' : 'var(--border)';
+        document.getElementById('btn-qr').style.borderColor = type === 'qr' ? 'var(--secondary)' : 'var(--border)';
     },
 
     confirmOrder() {
@@ -301,7 +301,7 @@ const app = {
     switchAdminTab(tab) {
         document.querySelectorAll('.admin-panel').forEach(el => el.classList.add('hide'));
         document.getElementById(`tab-${tab}`).classList.remove('hide');
-        document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.dataset.tab === tab ? btn.classList.add('tab-active') : btn.classList.remove('tab-active'));
+        document.querySelectorAll('.admin-btn').forEach(btn => btn.dataset.tab === tab ? btn.classList.add('active') : btn.classList.remove('active'));
         if(tab==='orders') this.updateAdminOrders();
     },
     
@@ -310,25 +310,23 @@ const app = {
             const ready = this.data.orders.filter(o=>o.status==='Ready' || o.status==='Delivered'); 
             
             const card = (o, act) => `
-            <div class="bg-gray-50 p-3 rounded border text-sm mb-2">
-                <div class="flex justify-between font-bold">
+            <div class="order-card-admin">
+                <div class="order-header">
                     <span>#${o.id}</span>
                     <span>$${o.total.toFixed(2)}</span>
                 </div>
-                <div class="flex justify-between items-center mb-1">
-                    <span class="text-xs text-gray-500 truncate">${o.items.length} items</span>
-                    <span class="text-xs px-2 py-0.5 rounded font-bold ${o.type==='takeaway' ? 'bg-purple-100 text-purple-700' : (o.status==='Pending'?'bg-orange-100 text-orange-700':'bg-blue-100 text-blue-700')}">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                    <span style="font-size: 0.75rem; color: #6b7280;">${o.items.length} items</span>
+                    <span class="status-badge ${o.type==='takeaway' ? 'badge-takeaway' : (o.status==='Pending'?'badge-pending':'badge-ready')}">
                         ${o.type === 'takeaway' ? 'Takeaway' : o.status}
                     </span>
                 </div>
-                <details class="mb-3 text-xs">
-                    <summary class="cursor-pointer text-blue-600 font-bold hover:underline flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> View Details</summary>
-                    <div class="mt-2 p-2 bg-white border rounded">
-                        <p class="font-bold text-gray-700">Type: ${o.type ? o.type.toUpperCase() : 'DELIVERY'}</p>
-                        <p class="font-bold text-gray-700">Address:</p>
-                        <p class="text-gray-600 mb-2">${o.address}</p>
-                        <p class="font-bold text-gray-700">Items:</p>
-                        <ul class="list-disc pl-4 text-gray-600">${o.items.map(i=>`<li>${i.qty}x ${i.name} (${i.type})</li>`).join('')}</ul>
+                <details style="font-size: 0.75rem; margin-bottom: 0.5rem;">
+                    <summary style="cursor: pointer; color: var(--blue); font-weight: bold;">View Details</summary>
+                    <div style="margin-top: 5px; padding: 5px; background: white; border: 1px solid var(--border); border-radius: 4px;">
+                        <p><strong>Type:</strong> ${o.type ? o.type.toUpperCase() : 'DELIVERY'}</p>
+                        <p><strong>Address:</strong> ${o.address}</p>
+                        <ul style="padding-left: 1rem; margin-top: 5px; color: #6b7280;">${o.items.map(i=>`<li>${i.qty}x ${i.name}</li>`).join('')}</ul>
                     </div>
                 </details>
                 ${act}
@@ -336,25 +334,22 @@ const app = {
 
             const getActionBtn = (o) => {
             if(o.status === 'Pending') {
-                return `<button onclick="app.setStatus(${o.id}, 'Cooking')" class="bg-orange-500 hover:bg-orange-600 text-white px-2 py-1.5 rounded text-xs w-full font-bold shadow-sm">Approve & Cook</button>`;
+                return `<button onclick="app.setStatus(${o.id}, 'Cooking')" class="btn-action btn-cook">Approve & Cook</button>`;
             } else {
-                return `<button onclick="app.setStatus(${o.id}, 'Ready')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1.5 rounded text-xs w-full font-bold shadow-sm">Mark Ready</button>`;
+                return `<button onclick="app.setStatus(${o.id}, 'Ready')" class="btn-action btn-ready">Mark Ready</button>`;
             }
             };
             
-            // Status Logic for "Ready" Column
             const getReadyStatus = (o) => {
                 if (o.type === 'takeaway') {
-                    // For Takeaway, "Ready" means Completed/Pick up now
-                    return `<span class="text-purple-600 text-xs font-bold block text-center border border-purple-200 bg-purple-50 rounded py-1">✅ Order Completed</span>`;
+                    return `<span style="display: block; text-align: center; color: var(--success); font-size: 0.75rem; font-weight: bold; border: 1px solid #bbf7d0; background: #f0fdf4; padding: 4px; border-radius: 4px;">✅ Order Completed</span>`;
                 } else {
-                    // For Delivery, it waits for a rider
-                    return `<span class="text-green-600 text-xs font-bold block text-center border border-green-200 bg-green-50 rounded py-1">Waiting Rider (${o.riderStatus})</span>`;
+                    return `<span style="display: block; text-align: center; color: var(--success); font-size: 0.75rem; font-weight: bold; border: 1px solid #bbf7d0; background: #f0fdf4; padding: 4px; border-radius: 4px;">Waiting Rider (${o.riderStatus})</span>`;
                 }
             };
             
-            document.getElementById('admin-orders-pending').innerHTML = active.length ? active.map(o => card(o, getActionBtn(o))).join('') : '<p class="text-gray-400 text-sm italic">No active orders.</p>';
-            document.getElementById('admin-orders-ready').innerHTML = ready.length ? ready.map(o => card(o, getReadyStatus(o))).join('') : '<p class="text-gray-400 text-sm italic">No ready orders.</p>';
+            document.getElementById('admin-orders-pending').innerHTML = active.length ? active.map(o => card(o, getActionBtn(o))).join('') : '<p style="color: #9ca3af; font-size: 0.875rem; font-style: italic;">No active orders.</p>';
+            document.getElementById('admin-orders-ready').innerHTML = ready.length ? ready.map(o => card(o, getReadyStatus(o))).join('') : '<p style="color: #9ca3af; font-size: 0.875rem; font-style: italic;">No ready orders.</p>';
     },
 
     setStatus(id, st) {
@@ -369,12 +364,12 @@ const app = {
 
     renderAdminMenu() {
         document.getElementById('admin-menu-list').innerHTML = this.data.menu.map(i => `
-            <tr class="border-b last:border-0">
-                <td class="py-2">${i.name}</td>
-                <td class="py-2"><span class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600 capitalize">${i.group || '-'}</span></td>
-                <td class="py-2"><span class="text-xs px-2 py-1 rounded font-bold ${i.type === 'veg' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${i.type}</span></td>
-                <td class="py-2">$${i.price}</td>
-                <td class="text-right"><button onclick="app.delItem(${i.id})" class="text-red-500"><i class="fa-solid fa-trash"></i></button></td>
+            <tr>
+                <td>${i.name}</td>
+                <td><span style="font-size: 0.75rem; padding: 2px 6px; background: #f3f4f6; border-radius: 4px; text-transform: capitalize;">${i.group || '-'}</span></td>
+                <td><span style="font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; ${i.type === 'veg' ? 'background: #dcfce7; color: #15803d;' : 'background: #fee2e2; color: #b91c1c;'}">${i.type}</span></td>
+                <td>$${i.price}</td>
+                <td style="text-align: right;"><button onclick="app.delItem(${i.id})" style="color: var(--danger); background: none; border: none; cursor: pointer;"><i class="fa-solid fa-trash"></i></button></td>
             </tr>
         `).join('');
     },
@@ -387,7 +382,7 @@ const app = {
             price: parseFloat(f.price.value), 
             cat: f.category.value, 
             type: f.type.value, 
-            group: f.group.value, // Capture the group
+            group: f.group.value,
             img: f.image.value
         });
         this.renderAdminMenu(); f.reset();
@@ -398,8 +393,8 @@ const app = {
 
     renderTables() {
         document.getElementById('admin-tables-grid').innerHTML = this.data.tables.map(t => {
-            const color = t.status === 'free' ? 'bg-green-100 text-green-700' : (t.status==='reserved'?'bg-yellow-100 text-yellow-700':'bg-red-100 text-red-700');
-            return `<div onclick="app.toggleTable(${t.id})" class="${color} p-4 rounded-lg text-center cursor-pointer font-bold">T-${t.id}<br><span class="text-xs font-normal uppercase">${t.status}</span></div>`;
+            const color = t.status === 'free' ? 'background: #dcfce7; color: #15803d;' : (t.status==='reserved'?'background: #fef9c3; color: #a16207;':'background: #fee2e2; color: #b91c1c;');
+            return `<div onclick="app.toggleTable(${t.id})" style="${color} padding: 1rem; border-radius: 8px; text-align: center; cursor: pointer; font-weight: bold;">T-${t.id}<br><span style="font-size: 0.75rem; font-weight: normal; text-transform: uppercase;">${t.status}</span></div>`;
         }).join('');
     },
     toggleTable(id) { const t=this.data.tables.find(x=>x.id===id); t.status = t.status==='free'?'reserved':(t.status==='reserved'?'occupied':'free'); this.renderTables(); },
@@ -408,7 +403,11 @@ const app = {
         const me = this.data.fleet.find(f=>f.isMe);
         if(me) me.status = this.data.riderStatus;
         document.getElementById('fleet-list').innerHTML = this.data.fleet.map(r => `
-            <tr><td class="p-3 font-medium">${r.name}</td><td class="p-3"><span class="px-2 py-1 rounded text-xs font-bold ${r.status==='Online'?'bg-green-100 text-green-700':(r.status==='Busy'?'bg-yellow-100 text-yellow-700':'bg-gray-200 text-gray-600')}">${r.status}</span></td><td class="p-3 text-xs text-gray-500">${r.isMe ? 'You' : 'Idle'}</td></tr>
+            <tr>
+                <td style="font-weight: 500;">${r.name}</td>
+                <td><span style="padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; ${r.status==='Online'?'background: #dcfce7; color: #15803d;':(r.status==='Busy'?'background: #fef9c3; color: #a16207;':'background: #e5e7eb; color: #4b5563;')}">${r.status}</span></td>
+                <td style="font-size: 0.75rem; color: #6b7280;">${r.isMe ? 'You' : 'Idle'}</td>
+            </tr>
         `).join('');
     },
 
@@ -423,21 +422,13 @@ const app = {
         document.querySelectorAll('.rider-subpanel').forEach(el => el.classList.add('hide'));
         document.getElementById(`rider-panel-${tab}`).classList.remove('hide');
         
-        const tNew = document.getElementById('rtab-new');
-        const tAct = document.getElementById('rtab-active');
-        
-        if(tab === 'new') {
-            tNew.className = "flex-1 py-3 text-sm font-bold text-blue-600 border-b-2 border-blue-600 bg-blue-50";
-            tAct.className = "flex-1 py-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:bg-gray-100";
-        } else {
-            tAct.className = "flex-1 py-3 text-sm font-bold text-blue-600 border-b-2 border-blue-600 bg-blue-50";
-            tNew.className = "flex-1 py-3 text-sm font-bold text-gray-500 border-b-2 border-transparent hover:bg-gray-100";
-        }
+        document.querySelectorAll('.rider-tab').forEach(el => el.classList.remove('active'));
+        document.getElementById(`rtab-${tab}`).classList.add('active');
     },
 
     renderRider() {
         if(this.data.riderStatus === 'Offline') {
-            document.getElementById('rider-list-new').innerHTML = '<div class="p-8 text-center text-gray-400">You are Offline.<br>Go Online to receive orders.</div>';
+            document.getElementById('rider-list-new').innerHTML = '<div style="padding: 2rem; text-align: center; color: #9ca3af;">You are Offline.<br>Go Online to receive orders.</div>';
             document.getElementById('rider-empty-new').classList.add('hide');
             return;
         }
@@ -451,15 +442,15 @@ const app = {
         } else {
             document.getElementById('rider-empty-new').classList.add('hide');
             elNew.innerHTML = newReqs.map(o => `
-                <div class="p-4 bg-white hover:bg-gray-50">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="font-bold text-gray-800">Order #${o.id}</span>
-                        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-bold">$${o.total.toFixed(2)}</span>
+                <div class="rider-card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                        <span style="font-weight: bold;">Order #${o.id}</span>
+                        <span style="font-size: 0.75rem; background: #dcfce7; color: #15803d; padding: 2px 6px; border-radius: 4px; font-weight: bold;">$${o.total.toFixed(2)}</span>
                     </div>
-                    <p class="text-xs text-gray-500 mb-2"><i class="fa-solid fa-location-dot mr-1"></i> ${o.address}</p>
-                    <div class="flex gap-2 mt-3">
-                        <button onclick="app.riderReject(${o.id})" class="flex-1 border border-red-200 text-red-600 py-2 rounded text-sm font-medium hover:bg-red-50">Reject</button>
-                        <button onclick="app.riderAccept(${o.id})" class="flex-1 bg-gray-900 text-white py-2 rounded text-sm font-medium hover:bg-gray-800">Accept</button>
+                    <p style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.5rem;"><i class="fa-solid fa-location-dot"></i> ${o.address}</p>
+                    <div class="btn-group">
+                        <button onclick="app.riderReject(${o.id})" class="btn-outline-danger">Reject</button>
+                        <button onclick="app.riderAccept(${o.id})" class="btn-solid-dark">Accept</button>
                     </div>
                 </div>
             `).join('');
@@ -471,18 +462,18 @@ const app = {
         } else {
             document.getElementById('rider-empty-active').classList.add('hide');
             elAct.innerHTML = myActive.map(o => `
-                <div class="p-4 bg-white border-l-4 border-blue-500 shadow-sm mb-2">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="font-bold text-lg">#${o.id}</span>
-                        <a href="#" class="text-blue-600 text-xs underline"><i class="fa-solid fa-map"></i> Open Map</a>
+                <div class="rider-card" style="border-left: 4px solid var(--blue); box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                        <span style="font-weight: bold; font-size: 1.1rem;">#${o.id}</span>
+                        <a href="#" style="color: var(--blue); font-size: 0.75rem; text-decoration: underline;"><i class="fa-solid fa-map"></i> Open Map</a>
                     </div>
-                    <div class="bg-gray-50 p-2 rounded text-sm text-gray-700 mb-3 border border-gray-100">
-                        <p class="font-bold mb-1">Delivery Address:</p>
+                    <div style="background: white; padding: 0.5rem; border-radius: 4px; font-size: 0.875rem; border: 1px solid var(--border); margin-bottom: 0.75rem;">
+                        <p style="font-weight: bold; margin-bottom: 2px;">Delivery Address:</p>
                         <p>${o.address}</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="app.riderFail(${o.id})" class="text-red-600 border border-red-200 py-2 rounded text-sm font-medium hover:bg-red-50">Failed</button>
-                        <button onclick="app.riderComplete(${o.id})" class="bg-green-600 text-white py-2 rounded text-sm font-medium hover:bg-green-700">Delivered</button>
+                    <div class="btn-group">
+                        <button onclick="app.riderFail(${o.id})" class="btn-outline-danger" style="flex:1;">Failed</button>
+                        <button onclick="app.riderComplete(${o.id})" class="btn-solid-dark" style="background: var(--success); flex:1;">Delivered</button>
                     </div>
                 </div>
             `).join('');
@@ -523,10 +514,15 @@ const app = {
         const t = document.getElementById('toast');
         document.getElementById('toast-msg').innerText = msg;
         const icon = t.querySelector('i');
-        if(type==='error'){ icon.className="fa-solid fa-circle-xmark text-red-400"; }
-        else { icon.className="fa-solid fa-check-circle text-green-400"; }
-        t.classList.remove('translate-y-20', 'opacity-0');
-        setTimeout(()=>t.classList.add('translate-y-20', 'opacity-0'), 3000);
+        if(type==='error'){ 
+            icon.className="fa-solid fa-circle-xmark"; 
+            t.style.background = "var(--danger)";
+        } else { 
+            icon.className="fa-solid fa-check-circle"; 
+            t.style.background = "var(--secondary)";
+        }
+        t.classList.add('show');
+        setTimeout(()=>t.classList.remove('show'), 3000);
     }
 };
 
