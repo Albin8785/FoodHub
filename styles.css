@@ -319,7 +319,20 @@ main {
 @media (max-width: 768px) {
     .layout-split { flex-direction: column; }
     .cart-area { width: 100%; }
-    .cart-card { position: fixed; bottom: 0; left: 0; right: 0; top: auto; z-index: 40; border-radius: 1rem 1rem 0 0; box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.1); }
+    
+    /* FIX: Add cushion so last item is not hidden behind fixed cart */
+    .menu-area { padding-bottom: 320px; }
+
+    .cart-card { 
+        position: fixed; 
+        bottom: 0; 
+        left: 0; 
+        right: 0; 
+        top: auto; 
+        z-index: 40; 
+        border-radius: 1rem 1rem 0 0; 
+        box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.1); 
+    }
     .cart-body { max-height: 120px; }
     .hide-mobile { display: none; }
 }
